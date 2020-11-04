@@ -43,6 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd party applications
+    'rest_framework',  # 追加
+
+    # My applications
+    'apiv1.apps.Apiv1Config',  # 追加
+    'shop.apps.ShopConfig'  # 追加
 ]
 
 MIDDLEWARE = [
