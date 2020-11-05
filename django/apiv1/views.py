@@ -1,3 +1,5 @@
+import logging
+
 from django_filters import rest_framework as filters
 from django.shortcuts import get_object_or_404
 
@@ -10,16 +12,45 @@ from rest_framework import generics
 from ..shop.models import Book
 from .serializers import BookSerializer
 
+########################
+# ModelViewSet
+########################
+from rest_framework import viewsets
+
+from ..shop.models import Book
+from .serializers import BookSerializer
+
+class BookViewSet(viewsets.ModelViewSet):
+    """本モデルのCRUD用APIクラス"""
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
 
 ########################
 # 汎用APIView
-#######################
+########################
+# class BookCreateAPIView(generics.CreateAPIView):
+#     """
+#     本モデルの登録APIクラス
+#     - create()を提供している
+#     """
+#     serializer_class = BookSerializer
+#
+
+
+logger = logging.getLogger(__name__)
+
+
 class BookCreateAPIView(generics.CreateAPIView):
-    """
-    本モデルの登録APIクラス
-    - create()を提供している
-    """
+    """本モデルの登録APIクラス"""
     serializer_class = BookSerializer
+
+    def create(self, request, *args, **kwargs):
+        """本モデルの登録APIに対応するアクションメソッド"""
+        response = super().create(request, *args, **kwargs)
+        logger.info("Book(id={})を登録しました。".format(response.data['id']))
+        return response
+
 
 class BookListAPIView(generics.ListAPIView):
     """
@@ -43,7 +74,6 @@ class BookUpdateAPIVIew(generics.UpdateAPIView):
 
 class BookDeleteAPIVIew(generics.DestroyAPIView):
     queryset = Book.objects.all()
-
 
 
 ########################
