@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     # 3rd party applications
     'rest_framework',  # 追加
+    'rest_framework.authtoken',  # 追加
 
     # My applications
     'apiv1.apps.Apiv1Config',  # 追加
@@ -127,3 +128,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+##############################
+# Django REST framework用の設定
+##############################
+REST_FRAMEWORK = {
+    # 認証クラスにCookie認証（SessionAuthentication）を指定
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',  # 追加
+        'rest_framework.authentication.TokenAuthentication',  # 追加
+
+    ],
+}

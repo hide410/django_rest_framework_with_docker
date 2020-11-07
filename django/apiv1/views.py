@@ -3,7 +3,9 @@ import logging
 from django_filters import rest_framework as filters
 from django.shortcuts import get_object_or_404
 
+from rest_framework import viewsets
 from rest_framework import status, views
+
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
@@ -12,18 +14,17 @@ from rest_framework import generics
 from ..shop.models import Book
 from .serializers import BookSerializer
 
-########################
-# ModelViewSet
-########################
-from rest_framework import viewsets
 
-from ..shop.models import Book
-from .serializers import BookSerializer
+########################
+# ModelViewSe
+########################
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class BookViewSet(viewsets.ModelViewSet):
     """本モデルのCRUD用APIクラス"""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 ########################
@@ -36,7 +37,6 @@ class BookViewSet(viewsets.ModelViewSet):
 #     """
 #     serializer_class = BookSerializer
 #
-
 
 logger = logging.getLogger(__name__)
 
@@ -62,15 +62,18 @@ class BookListAPIView(generics.ListAPIView):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = '__all__'
 
+
 class BookRetrieveAPIView(generics.RetrieveAPIView):
     """本モデルの取得（詳細）APIクラス"""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+
 class BookUpdateAPIVIew(generics.UpdateAPIView):
     """本モデルの更新・一部更新APIクラス"""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
 
 class BookDeleteAPIVIew(generics.DestroyAPIView):
     queryset = Book.objects.all()
